@@ -26,7 +26,9 @@ const Navbar = (props) =>{
                 <LinkItem  linkRef='/' label='Home'/>
             </li>
             <li className='nav-item'>
-            <button type='button' className='btn btn-dark' onClick={handleLogged} >Log Out</button>
+            <button type='button' className='btn btn-dark'
+             //onClick={handleLogged} 
+             >Log Out</button>
             </li>
             <li className='nav-item'>
                 <LinkItem  linkRef='/profile/'label='Profile'/>

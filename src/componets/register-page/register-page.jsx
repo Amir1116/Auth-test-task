@@ -4,6 +4,8 @@ import Button from '../button';
 import {validateEmail,validatePassword,validateConfPass} from '../../validation/validation';
 import {withRouter} from 'react-router-dom';
 import axios from 'axios';
+import {API_KEY} from '../../axios/api-key';
+
 
 class RegisterPage extends Component {
     constructor(){
@@ -30,7 +32,7 @@ class RegisterPage extends Component {
         }
     }
 
-    validateRegister=(input,value,)=>{
+    validateInputs=(input,value,)=>{
         let isInvalid = true;
         switch(input){
             case 'email':
@@ -48,7 +50,7 @@ class RegisterPage extends Component {
         const formControls = {...this.state.formControls};
         const eControl = {...formControls[inputName]};
         eControl.value = e.target.value;
-        eControl.isInvalid = inputName!=='confPass'?(this.validateRegister(inputName,eControl.value)): (validateConfPass(this.state.formControls.password.value, eControl.value)); 
+        eControl.isInvalid = inputName!=='confPass'?(this.validateInputs(inputName,eControl.value)): (validateConfPass(this.state.formControls.password.value, eControl.value)); 
         eControl.isValid = !eControl.isInvalid;      
         formControls[inputName]=eControl;
         const allValidate = this.allValid(formControls);
@@ -63,24 +65,29 @@ class RegisterPage extends Component {
         return valid;     
     }
 
-    registerHandler=()=>{
-       
-    }
-    submitHandler=(e)=>{
-        e.preventDefault();
-        // let history = useHistory();
-        const userData = {
+    registerHandler= async()=>{       
+        const authData = {
             email: this.state.formControls.email.value,
             password: this.state.formControls.password.value,
-        }   
-        console.log(userData);      
-        this.props.history.push('/login');     
+            returnSecureToken:true,
+        };   
+        console.log(authData);
+        try{
+            const axiosRes = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`, authData);
+            this.props.history.push('/login');            
+        } catch (e){
+            console.log(e);
+        }      
+         
+    }
+    submitHandler=(e)=>{
+        e.preventDefault();         
     }
     
     
     render(){
         const disabledBtn = !this.state.allValid;
-        console.log(this.props); 
+        
         return(
             <div className='container container-form-width'>
                 <h2 className='login-page-title'>Registration Page</h2>
@@ -131,7 +138,7 @@ class RegisterPage extends Component {
                     <Button
                      disabled={disabledBtn}
                      btnClasses='btn-primary'
-                     hadleClick={this.registerHandler}
+                     handleClick={this.registerHandler}
                      >register</Button>           
                    
                 </form>

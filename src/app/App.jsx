@@ -6,7 +6,6 @@ import MainPage from '../componets/main/';
 import LoginPage from '../componets/login-page';
 import RegisterPage from '../componets/register-page';
 import ProfilePage from '../componets/profile-page';
-import Loader from '../componets/loader'
 import Footer from '../componets/footer';
 
 class App extends Component {
@@ -14,30 +13,46 @@ class App extends Component {
   constructor(){
     super()
     this.state={
-      isLogged:true,
+      userName:'',
+      isLogged:false,
     }
   }
   handleIsLogged = ()=>{
-    this.setState((prevLogged)=>{
+    this.setState((prevLogged)=>{      
       return{
-        isLogged:!prevLogged,
+        isLogged:!prevLogged.isLogged,
       }
-    })
+    }) 
+    }
 
-  }
+  hadleUserName = (name)=>{
+    this.setState({
+      userName: name
+    })
+  }  
 
   render(){    
 
     return (
       <Fragment>
-        <Header isLogged={this.state.isLogged} handleLogged={this.handleIsLogged}/>
-        <div className='main-section'>
-         <Loader/>
+        <Header 
+        isLogged={this.state.isLogged} 
+        // handleLogged={this.handleIsLogged}
+        />
+        <div className='main-section'>      
           <Switch>
-            <Route exact path='/' component={MainPage} /> 
-            <Route exact path='/login' component={LoginPage} /> 
-            <Route exact path='/registration' component={RegisterPage} /> 
-            <Route exact path='/profile' component={ProfilePage} /> 
+            <Route exact path='/' >
+              <MainPage/> 
+            </Route>
+            <Route exact path='/login'>
+              <LoginPage handleLogged={this.handleIsLogged} handleUserName={this.hadleUserName}/>
+            </Route>  
+            <Route exact path='/registration'>
+             <RegisterPage/>  
+            </Route> 
+            <Route exact path='/profile'>
+              <ProfilePage user={this.state.userName}/> 
+            </Route> 
           </Switch>
         </div>
   
