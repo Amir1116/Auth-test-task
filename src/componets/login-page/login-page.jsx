@@ -1,41 +1,73 @@
-import React,{useState} from 'react';
+import React,{Component} from 'react';
 import './login-page-style.scss';
 import InputItem from '../input-item';
+import Button from '../button';
 
-const LoginPage = () =>{
-    const [email,setEmail] = useState('');
-    const [password,setPassword] = useState('');
-    return(
-        <div className='container container-form-width'>
-            <h2 className='login-page-title'>Login Page</h2>
-            <form>
-                <div className="mb-3">
-                    <InputItem 
-                        type='text'
-                        name='email'
-                        placehotder='enter your email...'
-                        label='Email address'
-                        htmlForId ='emailId'
-                        value={email}
-                        handleChange={(e)=> setEmail(e.target.value)}
-                    />          
-                </div>
-                <div className="mb-3">
-                    <InputItem 
-                        type='password'
-                        name='password'
-                        placehotder=''
-                        label='Password'
-                        htmlForId= 'passId'
-                        value={password}
-                        handleChange={(e)=>setPassword(e.target.value)}
-                    />                    
-                </div>             
-                <button type="submit" className="btn btn-primary mt-3">Login
-                </button>
-            </form>
-        </div>
-    )
+class LoginPage extends Component{
+    // constructor(){
+    //     super()
+    //     // this.state={            
+    //     //         email:{
+    //     //             value:'',
+    //     //             isInvalid:false,
+    //     //         },
+    //     //         password:{
+    //     //             value:'',
+    //     //             isInvalid:false,
+    //     //         },            
+    //     // }
+    // }
+
+
+    loginHandler=()=>{
+
+    }
+    submitHandler=(e)=>{
+        e.preventDefault();
+    }
+
+    render(){
+        return(
+            <div className='container container-form-width'>
+                <h2 className='login-page-title'>Login Page</h2>
+                <form onSubmit={this.submitHandler}>
+                    <div className="mb-3">
+                        <InputItem 
+                            type='text'
+                            name='email'
+                            placehotder='enter your email...'
+                            label='Email address'
+                            htmlForId ='emailId'
+                            invalid
+                            // value={this.state.formControls.email.value}
+                            // handleChange={(e)=> setEmail(e.target.value)}
+                        />          
+                    </div>
+                    <div className="mb-3">
+                        <InputItem 
+                            type='password'
+                            name='password'
+                            placehotder=''
+                            label='Password'
+                            htmlForId= 'passId'
+                            invalid
+                            // value={password}
+                            // handleChange={}
+                        />                    
+                    </div> 
+                    <Button 
+                    btnClasses='btn-primary'
+                    disabled={false}
+                    handleClick={this.loginHandler}    
+                    >
+                    login
+                    </Button>            
+                   
+                </form>
+            </div>
+        )
+    }
+    
 }
 
 export default LoginPage;
