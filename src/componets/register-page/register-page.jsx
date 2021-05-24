@@ -5,32 +5,33 @@ import {validateEmail,validatePassword,validateConfPass} from '../../validation/
 import {withRouter} from 'react-router-dom';
 import axios from 'axios';
 import {API_KEY} from '../../axios/api-key';
-
+import {connect} from 'redux';
+import {createUserData} from '../../redux/actions/registerAction'
 
 class RegisterPage extends Component {
-    constructor(){
-        super()
-        this.state={ 
-            formControls:{
-                email:{
-                    value:'',
-                    isValid:false,
-                    isInvalid:false
-                },
-                password:{
-                    value:'',
-                    isValid:false,
-                    isInvalid:false,
-                },
-                confPass:{
-                    value:'',
-                    isValid:false,
-                    isInvalid:false,                                
-                }            
-            },
-            allValid:false,           
-        }
-    }
+    // constructor(){
+    //     super()
+    //     this.state={ 
+    //         formControls:{
+    //             email:{
+    //                 value:'',
+    //                 isValid:false,
+    //                 isInvalid:false
+    //             },
+    //             password:{
+    //                 value:'',
+    //                 isValid:false,
+    //                 isInvalid:false,
+    //             },
+    //             confPass:{
+    //                 value:'',
+    //                 isValid:false,
+    //                 isInvalid:false,                                
+    //             }            
+    //         },
+    //         allValid:false,           
+    //     }
+    // }
 
     validateInputs=(input,value,)=>{
         let isInvalid = true;
@@ -45,20 +46,21 @@ class RegisterPage extends Component {
         
     }
 
-    onChangeHandler=(e)=>{  
-        const inputName = e.target.name;
-        const formControls = {...this.state.formControls};
-        const eControl = {...formControls[inputName]};
-        eControl.value = e.target.value;
-        eControl.isInvalid = inputName!=='confPass'?(this.validateInputs(inputName,eControl.value)): (validateConfPass(this.state.formControls.password.value, eControl.value)); 
-        eControl.isValid = !eControl.isInvalid;      
-        formControls[inputName]=eControl;
-        const allValidate = this.allValid(formControls);
-        this.setState({
-            formControls,
-            allValid:allValidate
-        })                  
-    }   
+    // onChangeHandler=(e)=>{ 
+         
+        // const inputName = e.target.name;
+        // const formControls = {...this.state.formControls};
+        // const eControl = {...formControls[inputName]};
+        // eControl.value = e.target.value;
+        // eControl.isInvalid = inputName!=='confPass'?(this.validateInputs(inputName,eControl.value)): (validateConfPass(this.state.formControls.password.value, eControl.value)); 
+        // eControl.isValid = !eControl.isInvalid;      
+        // formControls[inputName]=eControl;
+        // const allValidate = this.allValid(formControls);
+        // this.setState({
+        //     formControls,
+        //     allValid:allValidate
+        // })                  
+    // }   
 
     allValid = (obj)=>{
         const valid = (Object.values(obj)).every((control)=>control.isValid===true);
@@ -86,7 +88,7 @@ class RegisterPage extends Component {
     
     
     render(){
-        const disabledBtn = !this.state.allValid;
+        const disabledBtn = !this.props.allValid;
         
         return(
             <div className='container container-form-width'>
@@ -99,11 +101,11 @@ class RegisterPage extends Component {
                             placehotder='enter your email...'
                             label='Email address'
                             htmlForId ='emailId'
-                            value={this.state.formControls.email.value}
+                            value={this.props.formControls.email.value}
                             handleChange={(e)=>{
-                                this.onChangeHandler(e)
+                                this.props.createUserData(e);
                             }}
-                            isInvalid={this.state.formControls.email.isInvalid}
+                            isInvalid={this.props.formControls.email.isInvalid}
                         />          
                     </div>
                     <div className="mb-3">
@@ -113,11 +115,11 @@ class RegisterPage extends Component {
                             placehotder=''
                             label='Password'
                             htmlForId= 'passId'
-                            value={this.state.formControls.password.value}
+                            value={this.props.formControls.password.value}
                             handleChange={(e)=>{
-                                this.onChangeHandler(e)
+                                this.props.createUserData(e);
                             }}
-                            isInvalid={this.state.formControls.password.isInvalid}
+                            isInvalid={this.props.formControls.password.isInvalid}
                         />                    
                     </div>             
                     <div className="mb-3">
@@ -127,18 +129,18 @@ class RegisterPage extends Component {
                             placehotder=''
                             label='Confirm password'
                             htmlForId= 'confPassId'
-                            value={this.state.formControls.confPass.value}
+                            value={this.props.formControls.confPass.value}
                             handleChange={(e)=>{
-                                this.onChangeHandler(e)
+                                this.props.createUserData(e);
                             }}
-                            isInvalid={this.state.formControls.confPass.isInvalid}
+                            isInvalid={this.props.formControls.confPass.isInvalid}
                             
                         />                    
                     </div>  
                     <Button
                      disabled={disabledBtn}
                      btnClasses='btn-primary'
-                     handleClick={this.registerHandler}
+                     handleClick={this.props.registerHandler}
                      >register</Button>           
                    
                 </form>
@@ -148,4 +150,20 @@ class RegisterPage extends Component {
 }
 }
 
-export default withRouter(RegisterPage);
+function userDataToProps(state){
+    return {
+        formControls:state.register.formControls,
+        allValid:state.register.allValid,
+    }
+
+}
+
+function registerDispatchToProps(dispatch){
+    return{
+        createUserData: ()=>dispatch(createUserData()),
+        // registerUser: ()=>registerUser(registerUser()),
+    
+    }
+}
+
+export default connect(userDataToProps,registerDispatchToProps)(withRouter(RegisterPage));
