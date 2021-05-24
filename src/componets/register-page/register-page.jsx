@@ -5,7 +5,7 @@ import {validateEmail,validatePassword,validateConfPass} from '../../validation/
 import {withRouter} from 'react-router-dom';
 import axios from 'axios';
 import {API_KEY} from '../../axios/api-key';
-import {connect} from 'redux';
+import {connect} from 'react-redux';
 //import {createUserData} from '../../redux/actions/registerAction'
 
 class RegisterPage extends Component {
@@ -67,19 +67,23 @@ class RegisterPage extends Component {
         return valid;     
     }
 
-    registerHandler= async()=>{       
-        const authData = {
-            email: this.state.formControls.email.value,
-            password: this.state.formControls.password.value,
-            returnSecureToken:true,
-        };   
-        console.log(authData);
-        try{
-            const axiosRes = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`, authData);
-            this.state.history.push('/login');            
-        } catch (e){
-            console.log(e);
-        }      
+    registerHandler= async()=>{  
+        this.props.auth(
+            this.state.formControls.email.value,
+            this.state.formControls.password.value,
+        )     
+        // const authData = {
+        //     email: this.state.formControls.email.value,
+        //     password: this.state.formControls.password.value,
+        //     returnSecureToken:true,
+        // };   
+        // console.log(authData);
+        // try{
+        //     const axiosRes = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`, authData);
+        //     this.state.history.push('/login');            
+        // } catch (e){
+        //     console.log(e);
+        // }      
          
     }
     submitHandler=(e)=>{
@@ -103,7 +107,7 @@ class RegisterPage extends Component {
                             htmlForId ='emailId'
                             value={this.state.formControls.email.value}
                             handleChange={(e)=>{
-                                this.state.createUserData(e);
+                                this.onChangeHandler(e);
                             }}
                             isInvalid={this.state.formControls.email.isInvalid}
                         />          
@@ -117,7 +121,7 @@ class RegisterPage extends Component {
                             htmlForId= 'passId'
                             value={this.state.formControls.password.value}
                             handleChange={(e)=>{
-                                this.state.createUserData(e);
+                                this.onChangeHandler(e);
                             }}
                             isInvalid={this.state.formControls.password.isInvalid}
                         />                    
@@ -131,7 +135,7 @@ class RegisterPage extends Component {
                             htmlForId= 'confPassId'
                             value={this.state.formControls.confPass.value}
                             handleChange={(e)=>{
-                                this.state.createUserData(e);
+                                this.onChangeHandler(e);
                             }}
                             isInvalid={this.state.formControls.confPass.isInvalid}
                             
@@ -150,13 +154,12 @@ class RegisterPage extends Component {
 }
 }
 
-// function userDataTostate(state){
-//     return {
-//         formControls:state.register.formControls,
-//         allValid:state.register.allValid,
-//     }
+function mapDispatchToProps(state){
+    return {
+        auth:(email,password,isLogin) => dispatch(auth(email,password,isLogin))
+    }
 
-// }
+}
 
 // function registerDispatchTostate(dispatch){
 //     return{
@@ -166,4 +169,4 @@ class RegisterPage extends Component {
 //     }
 // }
 
-export default withRouter(RegisterPage);
+export default connect(null, mapDispatchToProps)(withRouter(RegisterPage));
