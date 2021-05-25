@@ -95,7 +95,8 @@ class RegisterPage extends Component {
                                 this.onChangeHandler(e);
                             }}
                             isInvalid={this.state.formControls.email.isInvalid}
-                        />          
+                        />   
+                        <p>example: user@email.com</p>       
                     </div>
                     <div className="mb-3">
                         <InputItem 
@@ -109,7 +110,8 @@ class RegisterPage extends Component {
                                 this.onChangeHandler(e);
                             }}
                             isInvalid={this.state.formControls.password.isInvalid}
-                        />                    
+                        /> 
+                        <p>Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:</p>                   
                     </div>             
                     <div className="mb-3">
                         <InputItem 
