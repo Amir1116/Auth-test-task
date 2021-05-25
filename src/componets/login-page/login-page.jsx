@@ -3,11 +3,13 @@ import './login-page-style.scss';
 import InputItem from '../input-item';
 import {validateEmail,validatePassword} from '../../validation/validation';
 import Button from '../button';
-import {API_KEY} from '../../axios/api-key';
-import {LOGIN_URL} from '../../axios/base_url';
-import axios from 'axios';
+// import {API_KEY} from '../../axios/api-key';
+// import {LOGIN_URL} from '../../axios/base_url';
+// import axios from 'axios';
 import Alert from '../alerts';
 import {withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {auth} from '../../redux/actions/auth-action.js'
 
 class LoginPage extends Component{
     constructor(props){
@@ -63,23 +65,27 @@ class LoginPage extends Component{
     }
 
     loginHandler= async ()=>{
-        const authData = {
-            email: this.state.formControls.email.value,
-            password: this.state.formControls.password.value,
-            returnSecureToken:true,
-        };        
-        try{
-            const axiosRes = await axios.post(`${LOGIN_URL}${API_KEY}`, authData);           
-            this.props.handleUserName(axiosRes.data.email)            
-            this.props.handleLogged();            
-            this.props.history.push('/profile')
+        this.props.auth(
+            this.state.formControls.email.value,
+            this.state.formControls.password.value,
+        )
+        // const authData = {
+        //     email: this.state.formControls.email.value,
+        //     password: this.state.formControls.password.value,
+        //     returnSecureToken:true,
+        // };        
+        // try{
+        //     const axiosRes = await axios.post(`${LOGIN_URL}${API_KEY}`, authData);           
+        //     this.props.handleUserName(axiosRes.data.email)            
+        //     this.props.handleLogged();            
+        //     this.props.history.push('/profile')
 
-        } catch (e){
-            const errorMessage = (e.response.data.error.message).toLowerCase().replace(/_/g,' ');            
-            this.setState({
-                errorMessage:errorMessage,
-            })           
-        } 
+        // } catch (e){
+        //     const errorMessage = (e.response.data.error.message).toLowerCase().replace(/_/g,' ');            
+        //     this.setState({
+        //         errorMessage:errorMessage,
+        //     })           
+        // } 
     }
     submitHandler=(e)=>{
         e.preventDefault();
@@ -131,5 +137,8 @@ class LoginPage extends Component{
     }
     
 }
+const mapDispatchToProps = (dispatch) =>({
+    auth:()=>dispatch(auth())
+})
 
-export default withRouter(LoginPage);
+export default connect(mapDispatchToProps)(withRouter(LoginPage));

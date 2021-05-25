@@ -3,9 +3,10 @@ import InputItem from '../input-item';
 import Button from '../button';
 import {validateEmail,validatePassword,validateConfPass} from '../../validation/validation';
 import {withRouter} from 'react-router-dom';
-import axios from 'axios';
-import {API_KEY} from '../../axios/api-key';
+//import axios from 'axios';
+//import {API_KEY} from '../../axios/api-key';
 import {connect} from 'react-redux';
+import {auth} from '../../redux/actions/auth-action';
 //import {createUserData} from '../../redux/actions/registerAction'
 
 class RegisterPage extends Component {
@@ -67,7 +68,7 @@ class RegisterPage extends Component {
         return valid;     
     }
 
-    registerHandler= async()=>{  
+    registerHandler =()=>{  
         this.props.auth(
             this.state.formControls.email.value,
             this.state.formControls.password.value,
@@ -144,7 +145,7 @@ class RegisterPage extends Component {
                     <Button
                      disabled={disabledBtn}
                      btnClasses='btn-primary'
-                     handleClick={this.state.registerHandler}
+                     handleClick={this.registerHandler}
                      >register</Button>           
                    
                 </form>
@@ -154,19 +155,10 @@ class RegisterPage extends Component {
 }
 }
 
-function mapDispatchToProps(state){
+function mapDispatchToProps(dispatch){
     return {
         auth:(email,password,isLogin) => dispatch(auth(email,password,isLogin))
     }
 
 }
-
-// function registerDispatchTostate(dispatch){
-//     return{
-//         createUserData: ()=>dispatch(createUserData()),
-//         // registerUser: ()=>registerUser(registerUser()),
-    
-//     }
-// }
-
 export default connect(null, mapDispatchToProps)(withRouter(RegisterPage));
