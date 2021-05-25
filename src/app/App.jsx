@@ -1,5 +1,5 @@
 import React,{Component,Fragment} from 'react';
-import {Route,Switch} from 'react-router-dom';
+import {Route,Switch,Redirect,} from 'react-router-dom';
 import './App.scss';
 import Header from '../componets/header';
 import MainPage from '../componets/main/';
@@ -7,53 +7,33 @@ import LoginPage from '../componets/login-page';
 import RegisterPage from '../componets/register-page';
 import ProfilePage from '../componets/profile-page';
 import Footer from '../componets/footer';
+import {connect} from 'react-redux';
+class App extends Component { 
 
-class App extends Component {
-
-  constructor(){
-    super()
-    this.state={
-      userName:'',
-      isLogged:false,
-    }
-  }
-  handleIsLogged = ()=>{
-    this.setState((prevLogged)=>{      
-      return{
-        isLogged:!prevLogged.isLogged,
-      }
-    }) 
-    }
-
-  hadleUserName = (name)=>{
-    this.setState({
-      userName: name
-    })
-  }  
-
-  render(){    
-
+  render(){ 
+    
     return (
       <Fragment>
         <Header 
-        isLogged={this.state.isLogged} 
-        // handleLogged={this.handleIsLogged}
+        isLogged={this.props.isLogged} 
+        
         />
         <div className='main-section'>      
           <Switch>
             <Route exact path='/' >
-              <MainPage/> 
+              <MainPage/>              
             </Route>
             <Route exact path='/login'>
-              <LoginPage handleLogged={this.handleIsLogged} handleUserName={this.hadleUserName}/>
+              {this.props.isLogged?<Redirect exact to='/profile'/>:<LoginPage />}               
             </Route>  
             <Route exact path='/registration'>
-             <RegisterPage/>  
+              {this.props.isRegister?<Redirect exact to='/login'/>:<RegisterPage/> }             
             </Route> 
-            <Route exact path='/profile'>
-              <ProfilePage user={this.state.userName}/> 
-            </Route> 
-          </Switch>
+            <Route exact path='/profile'> 
+              <ProfilePage/>          
+            </Route>
+            
+          </Switch>        
         </div>
   
       <Footer/>
@@ -62,5 +42,10 @@ class App extends Component {
   }
 
 }
+const mapStateToProps = (state) =>({
+  isRegister:state.auth.isRegister,
+  isLogged: state.auth.isLogged,  
+})
 
-export default App;
+
+export default connect(mapStateToProps)(App);

@@ -2,12 +2,9 @@ import React,{Component} from 'react';
 import InputItem from '../input-item';
 import Button from '../button';
 import {validateEmail,validatePassword,validateConfPass} from '../../validation/validation';
-import {withRouter} from 'react-router-dom';
-//import axios from 'axios';
-//import {API_KEY} from '../../axios/api-key';
 import {connect} from 'react-redux';
-import {auth} from '../../redux/actions/auth-action';
-//import {createUserData} from '../../redux/actions/registerAction'
+import {register} from '../../redux/actions/auth-action';
+
 
 class RegisterPage extends Component {
     constructor(){
@@ -69,32 +66,19 @@ class RegisterPage extends Component {
     }
 
     registerHandler =()=>{  
-        this.props.auth(
+        this.props.register(
             this.state.formControls.email.value,
             this.state.formControls.password.value,
-        )     
-        // const authData = {
-        //     email: this.state.formControls.email.value,
-        //     password: this.state.formControls.password.value,
-        //     returnSecureToken:true,
-        // };   
-        // console.log(authData);
-        // try{
-        //     const axiosRes = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`, authData);
-        //     this.state.history.push('/login');            
-        // } catch (e){
-        //     console.log(e);
-        // }      
-         
+        )           
     }
+
     submitHandler=(e)=>{
         e.preventDefault();         
     }
     
     
-    render(){
-        const disabledBtn = !this.state.allValid;
-        
+    render(){      
+        const disabledBtn = !this.state.allValid;     
         return(
             <div className='container container-form-width'>
                 <h2 className='login-page-title'>Registration Page</h2>
@@ -155,10 +139,12 @@ class RegisterPage extends Component {
 }
 }
 
-function mapDispatchToProps(dispatch){
+
+
+const mapDispatchToProps = (dispatch) => {
     return {
-        auth:(email,password,isLogin) => dispatch(auth(email,password,isLogin))
+        register:(email,password) => dispatch(register(email,password))
     }
 
 }
-export default connect(null, mapDispatchToProps)(withRouter(RegisterPage));
+export default connect(null, mapDispatchToProps)(RegisterPage);

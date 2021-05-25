@@ -4,11 +4,8 @@ import './navbar-style.scss';
 import {connect} from 'react-redux';
 import {logout} from '../../redux/actions/auth-action'
 
-class Navbar extends Component{
-    
-    // constructor(){
-    //     super()
-    // }
+class Navbar extends Component{ 
+   
     render(){
         const {isLogged,logout} = this.props;
         const mainNav = (
@@ -21,10 +18,7 @@ class Navbar extends Component{
                 </li>
                 <li className='nav-item'>
                     <LinkItem  linkRef='/registration' label='Registration'/>
-                </li>
-                <li className='nav-item'>
-                    <LinkItem  linkRef={isLogged?'/profile/':'/registration'} label='Profile'/>
-                </li>
+                </li>               
             </>    
             )
         const loggedNav = (
@@ -41,8 +35,7 @@ class Navbar extends Component{
                     <LinkItem  linkRef='/profile/'label='Profile'/>
                 </li>
             </>
-        )    
-    
+        )     
         
         return(
             <nav>            
@@ -55,7 +48,7 @@ class Navbar extends Component{
 }
 
 const mapStateToProps = (state) =>({
-   isLogged: state.isLogged,
+   isLogged: state.auth.isLogged,
 })
 
 const mapDispatchToProps = (dispatch) =>({

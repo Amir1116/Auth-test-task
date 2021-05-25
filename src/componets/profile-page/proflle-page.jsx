@@ -1,5 +1,6 @@
 import React from 'react';
 import './profile-page-style.scss';
+import {connect} from 'react-redux';
 
 const ProfilePage = ({user}) =>{
     return(
@@ -12,5 +13,8 @@ const ProfilePage = ({user}) =>{
         </div>
     )
 }
+const mapStateToProps = (state) =>({
+    user: state.auth.email
+})
 
-export default ProfilePage;
+export default connect(mapStateToProps)(ProfilePage);
