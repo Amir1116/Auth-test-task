@@ -30,7 +30,7 @@ class App extends Component {
               {this.props.isRegister?<Redirect exact to='/login'/>:<RegisterPage/> }             
             </Route> 
             <Route exact path='/profile'> 
-              <ProfilePage/>          
+            {!this.props.isLogged?<Redirect exact to='/'/>:<ProfilePage/> }                        
             </Route>
             
           </Switch>        
